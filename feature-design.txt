@@ -1,0 +1,19 @@
+a manga library to help manage the books that I own currently, so that I can stop buying the same volume more then once.
+for now it will be built for a website but eventually I want to move the project to be on android.
+ 
+backend will be built using golang.
+
+frontend and GUI might be built using DART since I want to eventually move it to android.
+
+the features I want (in no order):
+	-- a search function to look up manga using either MAL API or some other API source
+	-- ability to keep track of the series you own in the structure of series -> volumes -> extras
+	-- ability to add or delete series/volume** 
+	-- ability to show what is owned and what is missing in my library
+	-- ability to purchase missing volumes from a series, either through Amazon, MAL, or someother source.
+	-- a wishlist section
+	-- an update function that will notify the user that a new volume has been released for the series they want to keep track of.
+
+TODO: learn to properly setup a go project structure.
+TODO: create a git repo.
+TODO: start with the ones that have ** since I think those are doable.

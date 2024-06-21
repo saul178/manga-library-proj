@@ -12,7 +12,8 @@ the features I want (in no order):
 	-- ability to show what is owned and what is missing in my library
 	-- ability to purchase missing volumes from a series, either through Amazon, MAL, or someother source.
 	-- a wishlist section
-	-- an update function that will notify the user that a new volume has been released for the series they want to keep track of.
+	-- an update function that will notify the user that a new volume has been released for the series they want to 
+	   keep track of.
 
 TODO: learn to properly setup a go project structure.
 TODO: create a git repo.

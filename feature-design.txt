@@ -10,11 +10,17 @@ the features I want (in no order):
 	-- ability to keep track of the series you own in the structure of series -> volumes -> extras
 	-- ability to add or delete series/volume** 
 	-- ability to show what is owned and what is missing in my library
-	-- ability to purchase missing volumes from a series, either through Amazon, MAL, or someother source.
+	-- ability to purchase missing volumes from a series, either through Amazon, MAL, or some other source.
 	-- a wishlist section
 	-- an update function that will notify the user that a new volume has been released for the series they want to 
 	   keep track of.
 
-TODO: learn to properly setup a go project structure.
-TODO: create a git repo.
+TODO: learn to properly setup a go project structure. (ask David/Kelly if what i have is good enough or could be better.)
+
+DONE: create a git repo. 
+
+TODO: create a database structure for the library. (will probably use Postgres?)
+	-- need to install docker
+	-- setup postgres?
+
 TODO: start with the ones that have ** since I think those are doable.

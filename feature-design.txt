@@ -19,8 +19,9 @@ TODO: learn to properly setup a go project structure. (ask David/Kelly if what i
 
 DONE: create a git repo. 
 
-TODO: create a database structure for the library. (will probably use Postgres?)
-	-- need to install docker
-	-- setup postgres?
+TODO: create a database structure for the library. (will probably use Postgres.)
+	-- need to install docker DONE
+	-- create a basic schema for the database
+	-- setup postgres.
 
 TODO: start with the ones that have ** since I think those are doable.

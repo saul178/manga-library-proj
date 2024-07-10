@@ -15,7 +15,7 @@ the features I want (in no order):
 	-- an update function that will notify the user that a new volume has been released for the series they want to 
 	   keep track of.
 
-TODO: learn to properly setup a go project structure. (ask David/Kelly if what i have is good enough or could be better.)
+PROGRESSING: learn to properly setup a go project structure. (ask David/Kelly if what i have is good enough or could be better.)
 
 DONE: create a git repo. 
 

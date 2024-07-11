@@ -6,7 +6,6 @@ excluded_tag_names = ["Harem"]
 base_url = "https://api.mangadex.org"
 
 tags = requests.get(f"{base_url}/manga/tag").json()
-
 included_tag_ids = []
 
 # Iterate over each tag in tags["data"]
@@ -26,6 +25,7 @@ excluded_tag_ids = [
     if tag["attributes"]["name"]["en"] in excluded_tag_names
 ]
 
+print("before tags")
 r = requests.get(
     f"{base_url}/manga",
     params={
@@ -33,5 +33,6 @@ r = requests.get(
         "excludedTags[]": excluded_tag_ids,
     },
 )
+print("after tags")
 
 print([manga["attributes"]["title"] for manga in r.json()["data"]])

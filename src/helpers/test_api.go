@@ -1,11 +1,5 @@
 package helpers
 
-import (
-	"io"
-	"log"
-	"net/http"
-)
-
 type MangaDexResponse struct {
 	Result   string `json:"result"`
 	Response string `json:"response"`
@@ -31,17 +25,5 @@ type MangaData struct {
 				}
 			}
 		}
-	}
-}
-
-func getMangaTags(includedTags []string, excludedTags []string) []string {
-	return []string{}
-}
-
-func callTagsEndpoint(baseUrl string) {
-	resp, err := http.Get(baseUrl + "/manga/tag")
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal("you hard failed something!")
 	}
 }

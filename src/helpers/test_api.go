@@ -16,12 +16,12 @@ type MangaData struct {
 			}
 		}
 		Tags []struct {
-			ID         string `json:"id"`
-			Type       string `json:"type"`
-			Attributes struct {
-				Name struct {
-					Property1 string `json:"property1"`
-					Property2 string `json:"property2"`
+			TagID         string `json:"id"`
+			TagType       string `json:"type"`
+			TagAttributes struct {
+				TagName struct {
+					TagProperty1 string `json:"property1"`
+					TagProperty2 string `json:"property2"`
 				}
 			}
 		}

@@ -31,7 +31,7 @@ func main() {
 
 	resp, err := http.Get(u.String())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("you're actually bad at this", err)
 		return
 	}
 
@@ -42,7 +42,7 @@ func main() {
 	var manga helpers.MangaData
 	json.Unmarshal(body, &manga)
 
-	for _, m := range manga.Data {
-		fmt.Println(m.ID)
+	for index, m := range manga.Data {
+		fmt.Println(index, " ", m.ID)
 	}
 }

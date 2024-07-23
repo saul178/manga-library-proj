@@ -10,7 +10,8 @@ type MangaData struct {
 		ID         string `json:"id"`
 		Type       string `json:"type"`
 		Attributes struct {
-			Title map[string]string `json:"title"`
+			Title     map[string]string   `json:"title"`
+			AltTitles []map[string]string `json:"altTitles"`
 		} `json:"attributes"`
 	} `json:"data"`
 }

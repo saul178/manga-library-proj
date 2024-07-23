@@ -15,7 +15,7 @@ import (
 // really learn these standard libraries
 
 func main() {
-	title := "Kanojyo to Himitsu to Koimoyou"
+	title := "dragon ball"
 	baseUrl := "https://api.mangadex.org"
 
 	u, err := url.Parse(baseUrl)
@@ -41,8 +41,25 @@ func main() {
 
 	var manga helpers.MangaData
 	json.Unmarshal(body, &manga)
+	// Convert the manga data to an indented JSON string
+	indentedJson, err := json.MarshalIndent(manga, "", "  ")
+	if err != nil {
+		fmt.Println("error:", err)
+	}
 
-	for index, m := range manga.Data {
-		fmt.Println(index, " ", m)
+	// Print the indented JSON string
+	fmt.Println(string(indentedJson))
+
+	holdMangaData := manga.Data
+	for index, m := range holdMangaData {
+		fmt.Println(index, " ", m.Attributes.Title["en"])
+	}
+	for _, j := range holdMangaData {
+		for _, alt := range j.Attributes.AltTitles {
+			title, okStatus := alt["ja"]
+			if okStatus && title != "" {
+				fmt.Println(title)
+			}
+		}
 	}
 }

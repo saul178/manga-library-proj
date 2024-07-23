@@ -20,7 +20,7 @@ func main() {
 
 	u, err := url.Parse(baseUrl)
 	if err != nil {
-		log.Fatal("you did something wrong", err)
+		log.Fatal("you did something wrong ", err)
 	}
 
 	u.Path += "/manga"
@@ -31,7 +31,7 @@ func main() {
 
 	resp, err := http.Get(u.String())
 	if err != nil {
-		log.Fatal("you're actually bad at this", err)
+		log.Fatal("you're actually bad at this ", err)
 		return
 	}
 
@@ -43,6 +43,6 @@ func main() {
 	json.Unmarshal(body, &manga)
 
 	for index, m := range manga.Data {
-		fmt.Println(index, " ", m.ID)
+		fmt.Println(index, " ", m)
 	}
 }

@@ -15,7 +15,7 @@ import (
 // really learn these standard libraries
 
 func main() {
-	title := "dragon ball"
+	title := "negima"
 	baseUrl := "https://api.mangadex.org"
 
 	u, err := url.Parse(baseUrl)
@@ -41,13 +41,12 @@ func main() {
 
 	var manga helpers.MangaData
 	json.Unmarshal(body, &manga)
-	// Convert the manga data to an indented JSON string
+
 	indentedJson, err := json.MarshalIndent(manga, "", "  ")
 	if err != nil {
 		fmt.Println("error:", err)
 	}
 
-	// Print the indented JSON string
 	fmt.Println(string(indentedJson))
 
 	holdMangaData := manga.Data

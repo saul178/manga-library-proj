@@ -51,7 +51,8 @@ func main() {
 
 	holdMangaData := manga.Data
 	for index, m := range holdMangaData {
-		fmt.Println(index, " ", m.Attributes.Title["en"])
+		fmt.Println(index, " ", m.Attributes.Title["en"], m.Attributes.Links["mal"])
+		// fmt.Println(m.Attributes.Description)
 	}
 	for _, j := range holdMangaData {
 		for _, alt := range j.Attributes.AltTitles {

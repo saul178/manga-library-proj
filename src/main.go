@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/saul178/manga-library-proj/src/helpers"
+	"github.com/saul178/manga-library-proj/src/api"
 )
 
 // TODO: learn why the titles come out blank, figure out how to separate these into fuctions and
@@ -39,7 +39,7 @@ func main() {
 
 	body, err := io.ReadAll(resp.Body)
 
-	var manga helpers.MangaData
+	var manga api.MangaData
 	json.Unmarshal(body, &manga)
 
 	indentedJson, err := json.MarshalIndent(manga, "", "  ")

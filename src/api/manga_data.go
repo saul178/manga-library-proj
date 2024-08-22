@@ -1,4 +1,4 @@
-package helpers
+package api
 
 // NOTE: to get specific volumes/chapters i think i have to create another struct that only handles getting the volumes
 // and chapters. for the hopes of not bloating this file, i think i should create seperate api helpers etc

@@ -49,17 +49,19 @@ func main() {
 
 	fmt.Println(string(indentedJson))
 
-	holdMangaData := manga.Data
-	for index, m := range holdMangaData {
-		fmt.Println(index, " ", m.Attributes.Title["en"], m.Attributes.Links["mal"])
-		// fmt.Println(m.Attributes.Description)
-	}
-	for _, j := range holdMangaData {
-		for _, alt := range j.Attributes.AltTitles {
-			title, okStatus := alt["ja"]
-			if okStatus && title != "" {
-				fmt.Println(title)
-			}
-		}
-	}
+	// holdMangaData := manga.Data
+	//
+	//	for index, m := range holdMangaData {
+	//		fmt.Println(index, " ", m.Attributes.Title["en"], m.Attributes.Links["mal"])
+	//		// fmt.Println(m.Attributes.Description)
+	//	}
+	//
+	//	for _, j := range holdMangaData {
+	//		for _, alt := range j.Attributes.AltTitles {
+	//			title, okStatus := alt["ja"]
+	//			if okStatus && title != "" {
+	//				fmt.Println(title)
+	//			}
+	//		}
+	//	}
 }

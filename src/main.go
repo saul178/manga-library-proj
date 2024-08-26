@@ -11,8 +11,10 @@ import (
 	"github.com/saul178/manga-library-proj/src/api"
 )
 
-// TODO: learn why the titles come out blank, figure out how to separate these into fuctions and
-// really learn these standard libraries
+// TODO:
+// 1.) learn why the relationships array struct comes out blank,
+// 2.) figure out how to separate these into fuctions
+// 3.) really learn these standard libraries
 
 func main() {
 	title := "negima"

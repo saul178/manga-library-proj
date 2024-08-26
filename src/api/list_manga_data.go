@@ -1,11 +1,11 @@
 package api
 
+import "github.com/google/uuid"
+
 // NOTE: to get specific volumes/chapters i think i have to create another struct that only handles getting the volumes
 // and chapters. for the hopes of not bloating this file, i think i should create seperate api helpers etc
 
 // NOTE: i might have to refactor this in the future, im just not sure how i want to handle some of this info
-
-import "github.com/google/uuid"
 
 type MangaData struct {
 	Data []struct {

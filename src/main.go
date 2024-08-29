@@ -1,5 +1,12 @@
 package main
 
+/* TODO:
+   1.) learn why the relationships array struct comes out blank.
+	- the relationships array is pointing to other manga that have a relation with the series you looked up
+	- and it will show what type of manga it has a relation with. Negima doujinshi -> to Negima series etc
+   2.) figure out how to separate these into fuctions
+   3.) really learn these standard libraries
+*/
 import (
 	"encoding/json"
 	"fmt"
@@ -11,14 +18,19 @@ import (
 	"github.com/saul178/manga-library-proj/src/api"
 )
 
-// TODO:
-// 1.) learn why the relationships array struct comes out blank,
-// 2.) figure out how to separate these into fuctions
-// 3.) really learn these standard libraries
+const baseUrl = "https://api.mangadex.org"
+
+func searchByTag(includedTags []string, excludedTags []string) {
+	u, err := url.Parse(baseUrl)
+	if err != nil {
+		log.Fatal("you did something wrong ", err)
+	}
+
+	u.Path += "/manga/tag"
+}
 
 func main() {
 	title := "negima"
-	baseUrl := "https://api.mangadex.org"
 
 	u, err := url.Parse(baseUrl)
 	if err != nil {

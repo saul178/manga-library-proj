@@ -10,72 +10,84 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
 	"net/http"
 	"net/url"
-
-	"github.com/saul178/manga-library-proj/src/api"
 )
 
 const baseUrl = "https://api.mangadex.org"
 
-func searchByTag(includedTags []string, excludedTags []string) {
-	u, err := url.Parse(baseUrl)
+type Client struct {
+	HTTPClient *http.Client
+	BaseURL    string
+}
+
+func NewClient() *Client {
+	return &Client{
+		HTTPClient: &http.Client{},
+		BaseURL:    baseUrl,
+	}
+}
+
+type Manga struct {
+	ID    string            `json:"id"`
+	Title map[string]string `json:"title"`
+}
+
+func (c *Client) SearchManga(title string, limit int) ([]Manga, error) {
+	endpoint := fmt.Sprintf("%s/manga", c.BaseURL)
+	params := url.Values{}
+	params.Add("title", title)
+	params.Add("limit", fmt.Sprintf("%d", limit))
+
+	req, err := http.NewRequest("GET", endpoint+"?"+params.Encode(), nil)
 	if err != nil {
-		log.Fatal("you did something wrong ", err)
+		return nil, err
 	}
 
-	u.Path += "/manga/tag"
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("API error: %s", resp.Status)
+	}
+
+	var result struct {
+		Data []struct {
+			ID         string `json:"id"`
+			Attributes struct {
+				Title map[string]string `json:"title"`
+			} `json:"attributes"`
+		} `json:"data"`
+	}
+
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
+	var mangaList []Manga
+
+	for _, item := range result.Data {
+		mangaList = append(mangaList, Manga{
+			ID:    item.ID,
+			Title: item.Attributes.Title,
+		})
+	}
+	return mangaList, nil
 }
 
 func main() {
-	title := "negima"
-
-	u, err := url.Parse(baseUrl)
+	client := NewClient()
+	manga, err := client.SearchManga("negima", 2)
 	if err != nil {
-		log.Fatal("you did something wrong ", err)
-	}
-
-	u.Path += "/manga"
-
-	parameters := url.Values{}
-	parameters.Add("title", title)
-	u.RawQuery = parameters.Encode()
-
-	resp, err := http.Get(u.String())
-	if err != nil {
-		log.Fatal("you're actually bad at this ", err)
+		fmt.Println("Error: ", err)
 		return
 	}
 
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-
-	var manga api.MangaData
-	json.Unmarshal(body, &manga)
-
-	indentedJson, err := json.MarshalIndent(manga, "", "  ")
-	if err != nil {
-		fmt.Println("error:", err)
+	for _, m := range manga {
+		fmt.Printf("ID: %s, Title: %v\n", m.ID, m.Title["en"])
 	}
-
-	fmt.Println(string(indentedJson))
-
-	// holdMangaData := manga.Data
-	//
-	//	for index, m := range holdMangaData {
-	//		fmt.Println(index, " ", m.Attributes.Title["en"], m.Attributes.Links["mal"])
-	//		// fmt.Println(m.Attributes.Description)
-	//	}
-	//
-	//	for _, j := range holdMangaData {
-	//		for _, alt := range j.Attributes.AltTitles {
-	//			title, okStatus := alt["ja"]
-	//			if okStatus && title != "" {
-	//				fmt.Println(title)
-	//			}
-	//		}
-	//	}
 }

@@ -7,6 +7,8 @@ import "github.com/google/uuid"
 
 // NOTE: i might have to refactor this in the future, im just not sure how i want to handle some of this info
 
+// NOTE: use Go's memory profiling tool "pprof" for finding bottlenecks in memory usage.
+
 type MangaData struct {
 	Data []struct {
 		ID   uuid.UUID `json:"id"`

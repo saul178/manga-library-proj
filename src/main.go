@@ -81,7 +81,7 @@ func (c *Client) SearchManga(title string, limit int) ([]Manga, error) {
 
 func main() {
 	client := NewClient()
-	manga, err := client.SearchManga("negima", 2)
+	manga, err := client.SearchManga("Dragon ball z", 2)
 	if err != nil {
 		fmt.Println("Error: ", err)
 		return

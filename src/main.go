@@ -12,6 +12,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/saul178/manga-library-proj/src/api"
 )
 
 const baseUrl = "https://api.mangadex.org"
@@ -28,12 +30,7 @@ func NewClient() *Client {
 	}
 }
 
-type Manga struct {
-	ID    string            `json:"id"`
-	Title map[string]string `json:"title"`
-}
-
-func (c *Client) SearchManga(title string, limit int) ([]Manga, error) {
+func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 	endpoint := fmt.Sprintf("%s/manga", c.BaseURL)
 	params := url.Values{}
 	params.Add("title", title)
@@ -68,13 +65,10 @@ func (c *Client) SearchManga(title string, limit int) ([]Manga, error) {
 		return nil, err
 	}
 
-	var mangaList []Manga
+	var mangaList []api.MangaData
 
 	for _, item := range result.Data {
-		mangaList = append(mangaList, Manga{
-			ID:    item.ID,
-			Title: item.Attributes.Title,
-		})
+		fmt.Println(item.Attributes.Title)
 	}
 	return mangaList, nil
 }
@@ -88,6 +82,6 @@ func main() {
 	}
 
 	for _, m := range manga {
-		fmt.Printf("ID: %s, Title: %v\n", m.ID, m.Title["en"])
+		fmt.Println(m)
 	}
 }

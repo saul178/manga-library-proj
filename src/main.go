@@ -35,6 +35,7 @@ func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 	params := url.Values{}
 	params.Add("title", title)
 	params.Add("limit", fmt.Sprintf("%d", limit))
+	fmt.Println(params)
 
 	req, err := http.NewRequest("GET", endpoint+"?"+params.Encode(), nil)
 	if err != nil {
@@ -51,25 +52,19 @@ func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 		return nil, fmt.Errorf("API error: %s", resp.Status)
 	}
 
-	var result struct {
-		Data []struct {
-			ID         string `json:"id"`
-			Attributes struct {
-				Title map[string]string `json:"title"`
-			} `json:"attributes"`
-		} `json:"data"`
-	}
+	var result api.MangaData
 
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
-
 	var mangaList []api.MangaData
 
 	for _, item := range result.Data {
 		fmt.Println(item.Attributes.Title)
 	}
+	test, _ := json.MarshalIndent(result, "", " ")
+	fmt.Println(string(test))
 	return mangaList, nil
 }
 

@@ -68,15 +68,17 @@ func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 	return mangaList, nil
 }
 
+func (c *Client) searchByTags()
+
 func main() {
 	client := NewClient()
-	manga, err := client.SearchManga("negima", 5)
+	manga, err := client.SearchManga("negima", 2)
 	if err != nil {
 		fmt.Println("Error: ", err)
 		return
 	}
 
 	for _, m := range manga {
-		fmt.Println(m)
+		fmt.Println("in main: ", m)
 	}
 }

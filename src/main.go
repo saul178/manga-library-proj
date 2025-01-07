@@ -52,7 +52,7 @@ func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 		return nil, fmt.Errorf("API error: %s", resp.Status)
 	}
 
-	var result api.MangaData
+	var result api.MangaList
 
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
@@ -68,11 +68,35 @@ func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 	return mangaList, nil
 }
 
-func (c *Client) searchByTags()
+func (c *Client) searchByTags(includedTags, excludedTags []string, limit int) ([]api.MangaData, error) {
+	endpoint := fmt.Sprintf("%s/manga/tag", c.BaseURL)
+	tagsResp, err := http.Get(endpoint)
+	if err != nil {
+		return nil, err
+	}
+	defer tagsResp.Body.Close()
+
+	// params := url.Values{}
+	// params.Add("includedTags[]", includedTags[]) // for this to work i need the id of the tags so that they map to related manga
+}
+
+func extractTagIds(includedTagNames, excludedTagNames []string) ([]string, []string) {
+	var tags api.TagsList
+	var includedTagIDs []string
+	var excludedTagIDS []string
+
+	for _, tag := range tags.Data {
+		name, exists := tag.Attributes.Name["en"]
+		if exists {
+		}
+	}
+
+	return includedTagIDs, excludedTagIDS
+}
 
 func main() {
 	client := NewClient()
-	manga, err := client.SearchManga("negima", 2)
+	manga, err := client.SearchManga("negima", 1)
 	if err != nil {
 		fmt.Println("Error: ", err)
 		return

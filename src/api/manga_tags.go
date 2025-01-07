@@ -3,14 +3,20 @@ package api
 
 import "github.com/google/uuid"
 
-type Tags struct {
-	ID           uuid.UUID         `json:"id"`
-	Type         string            `json:"type"`
-	Attributes   TagAttributes     `json:"attributes"`
-	Relationship []TagRelationship `json:"relationship"`
-	Limit        int               `json:"limit"`
-	Offset       int               `json:"offset"`
-	Total        int               `json:"total"`
+type TagsList struct {
+	Result   string     `json:"result"`
+	Response string     `json:"response"`
+	Data     []TagsData `json:"tags"`
+	Limit    int        `json:"limit"`
+	Offset   int        `json:"offset"`
+	Total    int        `json:"total"`
+}
+
+type TagsData struct {
+	ID            uuid.UUID          `json:"id"`
+	Type          string             `json:"type"`
+	Attributes    TagAttributes      `json:"attributes"`
+	Relationships []TagRelationships `json:"relationships"`
 }
 
 type TagAttributes struct {
@@ -20,7 +26,7 @@ type TagAttributes struct {
 	Version     int               `json:"version"`
 }
 
-type TagRelationship []struct {
+type TagRelationships []struct {
 	ID         uuid.UUID `json:"id"`
 	Type       string    `json:"type"`
 	Related    string    `json:"related"`

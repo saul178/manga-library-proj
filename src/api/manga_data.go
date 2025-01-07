@@ -9,16 +9,20 @@ import "github.com/google/uuid"
 
 // NOTE: use Go's memory profiling tool "pprof" for finding bottlenecks in memory usage.
 
+type MangaList struct {
+	Result   string      `json:"result"`
+	Response string      `json:"response"`
+	Data     []MangaData `json:"data"`
+	Limit    int         `json:"limit"`
+	Offset   int         `json:"offset"`
+	Total    int         `json:"total"`
+}
+
 type MangaData struct {
-	Data []struct {
-		ID            uuid.UUID            `json:"id"`
-		Type          string               `json:"type"`
-		Attributes    MangaAttributes      `json:"attributes"`
-		Relationships []MangaRelationships `json:"relationships"`
-		Limit         int                  `json:"limit"`
-		Offset        int                  `json:"offset"`
-		Total         int                  `json:"total"`
-	} `json:"data"`
+	ID            uuid.UUID            `json:"id"`
+	Type          string               `json:"type"`
+	Attributes    MangaAttributes      `json:"attributes"`
+	Relationships []MangaRelationships `json:"relationships"`
 }
 
 type MangaAttributes struct {

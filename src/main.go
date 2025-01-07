@@ -88,7 +88,6 @@ func (c *Client) searchByTags(includedTags, excludedTags []string, limit int) ([
 	params := url.Values{}
 	for _, tagID := range includedTagsIDs {
 		params.Add("includedTags[]", tagID)
-		fmt.Println(tagID)
 	}
 
 	for _, tagID := range excludedTagsIDs {
@@ -123,7 +122,7 @@ func extractTagIds(tags api.TagsList, includedTagNames, excludedTagNames []strin
 
 	for _, tag := range tags.Data {
 		tagName, ok := tag.Attributes.Name["en"]
-		fmt.Println("in for loop: ", tagName, ok)
+
 		if ok {
 			if contains(includedTagNames, tagName) {
 				includedTagIDs = append(includedTagIDs, tag.ID.String())
@@ -132,7 +131,7 @@ func extractTagIds(tags api.TagsList, includedTagNames, excludedTagNames []strin
 			}
 		}
 	}
-	fmt.Println("in extract tag ids func: ", includedTagIDs, excludedTagIDS)
+	fmt.Printf("in extract tag ids func: %v, %v\n", includedTagIDs, excludedTagIDS)
 
 	return includedTagIDs, excludedTagIDS
 }
@@ -149,8 +148,8 @@ func contains(tagsNamesArr []string, tagName string) bool {
 
 func main() {
 	client := NewClient()
-	includedTags := []string{"Comedy", "Horror"}
-	excludedTags := []string{"Action"}
+	includedTags := []string{"comedy", "horror"}
+	excludedTags := []string{"action"}
 	manga, _ := client.searchByTags(includedTags, excludedTags, 3)
 	for _, m := range manga {
 		fmt.Println("in main: ", m.Attributes.Title)

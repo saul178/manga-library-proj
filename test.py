@@ -8,8 +8,8 @@ import requests
 #
 # print([manga["id"] for manga in r.json()["data"]])
 
-included_tag_names = ["comedy", "horror"]
-excluded_tag_names = ["action"]
+included_tag_names = ["Horror", "Comedy"]
+excluded_tag_names = ["Action"]
 
 base_url = "https://api.mangadex.org"
 
@@ -21,6 +21,7 @@ included_tag_ids = [
     for tag in tags["data"]
     if tag["attributes"]["name"]["en"] in included_tag_names
 ]
+print("included tag ids", included_tag_ids)
 
 # ["aafb99c1-7f60-43fa-b75f-fc9502ce29c7"]
 excluded_tag_ids = [
@@ -28,6 +29,7 @@ excluded_tag_ids = [
     for tag in tags["data"]
     if tag["attributes"]["name"]["en"] in excluded_tag_names
 ]
+print("excluded tag ids", excluded_tag_ids)
 
 r = requests.get(
     f"{base_url}/manga",

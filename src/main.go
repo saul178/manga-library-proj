@@ -77,10 +77,18 @@ func (c *Client) searchByTags(includedTags, excludedTags []string, limit int) ([
 	}
 	defer tagsResp.Body.Close()
 
-	includedTagsIDs, excludedTagsIDs := extractTagIds(includedTags, excludedTags)
+	var tags api.TagsList
+	tagErr := json.NewDecoder(tagsResp.Body).Decode(&tags)
+	if tagErr != nil {
+		return nil, err
+	}
+
+	includedTagsIDs, excludedTagsIDs := extractTagIds(tags, includedTags, excludedTags)
+
 	params := url.Values{}
 	for _, tagID := range includedTagsIDs {
 		params.Add("includedTags[]", tagID)
+		fmt.Println(tagID)
 	}
 
 	for _, tagID := range excludedTagsIDs {
@@ -106,19 +114,16 @@ func (c *Client) searchByTags(includedTags, excludedTags []string, limit int) ([
 		mangaList = append(mangaList, manga)
 	}
 
-	mangaJSON, _ := json.MarshalIndent(mangaList, "", " ")
-	fmt.Println(string(mangaJSON))
-
 	return mangaList, nil
 }
 
-func extractTagIds(includedTagNames, excludedTagNames []string) ([]string, []string) {
-	var tags api.TagsList
+func extractTagIds(tags api.TagsList, includedTagNames, excludedTagNames []string) ([]string, []string) {
 	var includedTagIDs []string
 	var excludedTagIDS []string
 
 	for _, tag := range tags.Data {
 		tagName, ok := tag.Attributes.Name["en"]
+		fmt.Println("in for loop: ", tagName, ok)
 		if ok {
 			if contains(includedTagNames, tagName) {
 				includedTagIDs = append(includedTagIDs, tag.ID.String())
@@ -127,6 +132,7 @@ func extractTagIds(includedTagNames, excludedTagNames []string) ([]string, []str
 			}
 		}
 	}
+	fmt.Println("in extract tag ids func: ", includedTagIDs, excludedTagIDS)
 
 	return includedTagIDs, excludedTagIDS
 }
@@ -143,14 +149,9 @@ func contains(tagsNamesArr []string, tagName string) bool {
 
 func main() {
 	client := NewClient()
-	includedTags := []string{"comedy", "horror"}
-	excludedTags := []string{"action"}
-	manga, err := client.searchByTags(includedTags, excludedTags, 10)
-	if err != nil {
-		fmt.Println("Error: ", err)
-		return
-	}
-
+	includedTags := []string{"Comedy", "Horror"}
+	excludedTags := []string{"Action"}
+	manga, _ := client.searchByTags(includedTags, excludedTags, 3)
 	for _, m := range manga {
 		fmt.Println("in main: ", m.Attributes.Title)
 	}

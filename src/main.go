@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/saul178/manga-library-proj/src/api"
 )
@@ -76,8 +77,15 @@ func (c *Client) searchByTags(includedTags, excludedTags []string, limit int) ([
 	}
 	defer tagsResp.Body.Close()
 
-	// params := url.Values{}
-	// params.Add("includedTags[]", includedTags[]) // for this to work i need the id of the tags so that they map to related manga
+	includedTagsIDs, excludedTagsIDs := extractTagIds(includedTags, excludedTags)
+	params := url.Values{}
+	for _, tagID := range includedTagsIDs {
+		params.Add("includedTags[]", tagID)
+	}
+
+	for _, tagID := range excludedTagsIDs {
+		params.Add("excludedTags[]", tagID)
+	}
 }
 
 func extractTagIds(includedTagNames, excludedTagNames []string) ([]string, []string) {
@@ -86,12 +94,27 @@ func extractTagIds(includedTagNames, excludedTagNames []string) ([]string, []str
 	var excludedTagIDS []string
 
 	for _, tag := range tags.Data {
-		name, exists := tag.Attributes.Name["en"]
-		if exists {
+		tagName, ok := tag.Attributes.Name["en"]
+		if ok {
+			if contains(includedTagNames, tagName) {
+				includedTagIDs = append(includedTagIDs, tag.ID.String())
+			} else if contains(excludedTagIDS, tagName) {
+				excludedTagIDS = append(excludedTagIDS, tag.ID.String())
+			}
 		}
 	}
 
 	return includedTagIDs, excludedTagIDS
+}
+
+// compare the names ignoring case sensitivity, should rename function to something more practical
+func contains(tagsNamesArr []string, tagName string) bool {
+	for _, v := range tagsNamesArr {
+		if strings.EqualFold(v, tagName) {
+			return true
+		}
+	}
+	return false
 }
 
 func main() {

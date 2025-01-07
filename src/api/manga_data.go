@@ -9,7 +9,7 @@ import "github.com/google/uuid"
 
 // NOTE: use Go's memory profiling tool "pprof" for finding bottlenecks in memory usage.
 
-type MangaList struct {
+type Manga struct {
 	Result   string      `json:"result"`
 	Response string      `json:"response"`
 	Data     []MangaData `json:"data"`
@@ -38,7 +38,7 @@ type MangaAttributes struct {
 	Status                         string              `json:"status"`
 	Year                           int                 `json:"year"`
 	ContentRating                  string              `json:"contentRating"`
-	Tags                           []Tags              `json:"tags"`
+	Tags                           []TagsList          `json:"tags"`
 	ChapterNumbersResetOnNewVolume bool                `json:"chapterNumbersResetOnNewVolume"`
 	AvailableTranslatedLanguages   []string            `json:"availableTranslatedLanguages"`
 	LatestUploadedChapter          string              `json:"latestUploadedChapter"`

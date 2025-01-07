@@ -31,43 +31,43 @@ func NewClient() *Client {
 	}
 }
 
-func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
-	endpoint := fmt.Sprintf("%s/manga", c.BaseURL)
-	params := url.Values{}
-	params.Add("title", title)
-	params.Add("limit", fmt.Sprintf("%d", limit))
-	fmt.Println(params)
-
-	req, err := http.NewRequest("GET", endpoint+"?"+params.Encode(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := c.HTTPClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("API error: %s", resp.Status)
-	}
-
-	var result api.MangaList
-
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	var mangaList []api.MangaData
-
-	for _, item := range result.Data {
-		fmt.Println(item.Attributes.Title)
-	}
-	test, _ := json.MarshalIndent(result, "", " ")
-	fmt.Println(string(test))
-	return mangaList, nil
-}
+// func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
+// 	endpoint := fmt.Sprintf("%s/manga", c.BaseURL)
+// 	params := url.Values{}
+// 	params.Add("title", title)
+// 	params.Add("limit", fmt.Sprintf("%d", limit))
+// 	fmt.Println(params)
+//
+// 	req, err := http.NewRequest("GET", endpoint+"?"+params.Encode(), nil)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+//
+// 	resp, err := c.HTTPClient.Do(req)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	defer resp.Body.Close()
+//
+// 	if resp.StatusCode != http.StatusOK {
+// 		return nil, fmt.Errorf("API error: %s", resp.Status)
+// 	}
+//
+// 	var result api.Manga
+//
+// 	err = json.NewDecoder(resp.Body).Decode(&result)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	var mangaList []api.MangaData
+//
+// 	for _, item := range result.Data {
+// 		fmt.Println(item.Attributes.Title)
+// 	}
+// 	test, _ := json.MarshalIndent(result, "", " ")
+// 	fmt.Println(string(test))
+// 	return mangaList, nil
+// }
 
 func (c *Client) searchByTags(includedTags, excludedTags []string, limit int) ([]api.MangaData, error) {
 	endpoint := fmt.Sprintf("%s/manga/tag", c.BaseURL)
@@ -86,6 +86,30 @@ func (c *Client) searchByTags(includedTags, excludedTags []string, limit int) ([
 	for _, tagID := range excludedTagsIDs {
 		params.Add("excludedTags[]", tagID)
 	}
+	params.Add("limit", fmt.Sprintf("%d", limit))
+
+	mangaReq := fmt.Sprintf("%s/manga?%s", c.BaseURL, params.Encode())
+	mangaResp, err := http.Get(mangaReq)
+	if err != nil {
+		return nil, err
+	}
+	defer mangaResp.Body.Close()
+
+	var mangaData api.Manga
+	mangaErr := json.NewDecoder(mangaResp.Body).Decode(&mangaData)
+	if mangaErr != nil {
+		return nil, err
+	}
+
+	var mangaList []api.MangaData
+	for _, manga := range mangaData.Data {
+		mangaList = append(mangaList, manga)
+	}
+
+	mangaJSON, _ := json.MarshalIndent(mangaList, "", " ")
+	fmt.Println(string(mangaJSON))
+
+	return mangaList, nil
 }
 
 func extractTagIds(includedTagNames, excludedTagNames []string) ([]string, []string) {
@@ -98,7 +122,7 @@ func extractTagIds(includedTagNames, excludedTagNames []string) ([]string, []str
 		if ok {
 			if contains(includedTagNames, tagName) {
 				includedTagIDs = append(includedTagIDs, tag.ID.String())
-			} else if contains(excludedTagIDS, tagName) {
+			} else if contains(excludedTagNames, tagName) {
 				excludedTagIDS = append(excludedTagIDS, tag.ID.String())
 			}
 		}
@@ -119,13 +143,15 @@ func contains(tagsNamesArr []string, tagName string) bool {
 
 func main() {
 	client := NewClient()
-	manga, err := client.SearchManga("negima", 1)
+	includedTags := []string{"comedy", "horror"}
+	excludedTags := []string{"action"}
+	manga, err := client.searchByTags(includedTags, excludedTags, 10)
 	if err != nil {
 		fmt.Println("Error: ", err)
 		return
 	}
 
 	for _, m := range manga {
-		fmt.Println("in main: ", m)
+		fmt.Println("in main: ", m.Attributes.Title)
 	}
 }

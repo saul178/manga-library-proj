@@ -1,4 +1,4 @@
-# import requests
+import requests
 #
 # title = "Kanojyo to Himitsu to Koimoyou"
 #
@@ -8,10 +8,8 @@
 #
 # print([manga["id"] for manga in r.json()["data"]])
 
-included_tag_names = ["Action", "Romance"]
-excluded_tag_names = ["Harem"]
-
-import requests
+included_tag_names = ["comedy", "horror"]
+excluded_tag_names = ["action"]
 
 base_url = "https://api.mangadex.org"
 

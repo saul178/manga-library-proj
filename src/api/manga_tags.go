@@ -6,7 +6,7 @@ import "github.com/google/uuid"
 type TagsList struct {
 	Result   string     `json:"result"`
 	Response string     `json:"response"`
-	Data     []TagsData `json:"tags"`
+	Data     []TagsData `json:"data"`
 	Limit    int        `json:"limit"`
 	Offset   int        `json:"offset"`
 	Total    int        `json:"total"`

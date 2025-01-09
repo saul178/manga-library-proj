@@ -38,7 +38,7 @@ type MangaAttributes struct {
 	Status                         string              `json:"status"`
 	Year                           int                 `json:"year"`
 	ContentRating                  string              `json:"contentRating"`
-	Tags                           []TagsList          `json:"tags"`
+	Tags                           []TagsData          `json:"tags"`
 	ChapterNumbersResetOnNewVolume bool                `json:"chapterNumbersResetOnNewVolume"`
 	AvailableTranslatedLanguages   []string            `json:"availableTranslatedLanguages"`
 	LatestUploadedChapter          string              `json:"latestUploadedChapter"`

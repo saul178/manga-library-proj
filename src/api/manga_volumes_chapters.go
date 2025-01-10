@@ -4,23 +4,14 @@ package api
 import "github.com/google/uuid"
 
 type MangaVolumeResponse struct {
-	Result  string         `json:"result"`
-	Volumes []MangaVolumes `json:"volumes"`
-}
-
-type MangaVolumes struct {
-	Properties []MangaVolumesProperties `json:"properties"`
+	Result  string                            `json:"result"`
+	Volumes map[string]MangaVolumesProperties `json:"volumes"`
 }
 
 type MangaVolumesProperties struct {
-	Volume   string                `json:"volume"`
-	Count    int                   `json:"count"`
-	Chapters []MangaVolumeChapters `json:"chapters"`
-}
-
-type MangaVolumeChapters struct {
-	Property []ChapterProperties `json:"property"`
-	Count    int                 `json:"count"`
+	Volume   string                       `json:"volume"`
+	Count    int                          `json:"count"`
+	Chapters map[string]ChapterProperties `json:"chapters"`
 }
 
 type ChapterProperties struct {

@@ -37,7 +37,6 @@ func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 	params := url.Values{}
 	params.Add("title", title)
 	params.Add("limit", fmt.Sprintf("%d", limit))
-	fmt.Println(params)
 
 	req, err := http.NewRequest("GET", endpoint+"?"+params.Encode(), nil)
 	if err != nil {
@@ -71,7 +70,7 @@ func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 // TODO: need to test retreiving manga volume and chapter information
 // NOTE: to get manga volumes & chapter info i need a specific manga id that is searched for.
 // func fetchMangaID(mangaTitle string)
-func (c *Client) fetchMangaVolumesInfo(mangaTitle string) (api.MangaVolumeResponse, error) {
+func (c *Client) GetMangaVolumesInfo(mangaTitle string) (api.MangaVolumeResponse, error) {
 	getManga, err := c.SearchManga(mangaTitle, 1)
 	if err != nil {
 		return api.MangaVolumeResponse{}, errors.New("need to learn how to error handle correctly.")
@@ -79,7 +78,24 @@ func (c *Client) fetchMangaVolumesInfo(mangaTitle string) (api.MangaVolumeRespon
 
 	mangaID := getManga[0].ID
 
-	return api.MangaVolumeResponse{}, nil
+	endpoint := fmt.Sprintf("%s/manga/%s/aggregate", c.BaseURL, mangaID)
+	params := url.Values{}
+	params.Add("mangaID", mangaID.String())
+
+	resp, err := http.Get(endpoint)
+	if err != nil {
+		return api.MangaVolumeResponse{}, errors.New("bad request \n")
+	}
+	defer resp.Body.Close()
+
+	var mangaVolResp api.MangaVolumeResponse
+	if err := json.NewDecoder(resp.Body).Decode(&mangaVolResp); err != nil {
+		return api.MangaVolumeResponse{}, fmt.Errorf("failed to decode response: %w", err)
+	}
+	test, _ := json.MarshalIndent(mangaVolResp, "", " ")
+	fmt.Println(string(test))
+
+	return mangaVolResp, nil
 }
 
 func (c *Client) SearchByTags(includedTags, excludedTags []string, limit int) ([]api.MangaData, error) {
@@ -109,6 +125,7 @@ func (c *Client) SearchByTags(includedTags, excludedTags []string, limit int) ([
 	params.Add("limit", fmt.Sprintf("%d", limit))
 
 	mangaReq := fmt.Sprintf("%s/manga?%s", c.BaseURL, params.Encode())
+	fmt.Println(mangaReq)
 	mangaResp, err := http.Get(mangaReq)
 	if err != nil {
 		return nil, err

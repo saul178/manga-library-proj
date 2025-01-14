@@ -77,6 +77,7 @@ func (c *Client) GetMangaVolumesInfo(mangaTitle string) (api.MangaVolumeResponse
 	}
 
 	mangaID := getManga[0].ID
+	fmt.Println(getManga[0].Attributes.Title, mangaID)
 
 	endpoint := fmt.Sprintf("%s/manga/%s/aggregate", c.BaseURL, mangaID)
 	params := url.Values{}
@@ -141,10 +142,6 @@ func (c *Client) SearchByTags(includedTags, excludedTags []string, limit int) ([
 	var mangaList []api.MangaData
 	for _, manga := range mangaData.Data {
 		mangaList = append(mangaList, manga)
-	}
-
-	for _, t := range mangaList {
-		fmt.Println(t.Type)
 	}
 
 	return mangaList, nil

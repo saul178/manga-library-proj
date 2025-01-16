@@ -10,8 +10,9 @@ func main() {
 	client := tests.TestClient()
 	//	includedTags := []string{"comedy", "horror"}
 	//	excludedTags := []string{"action"}
-	client.GetMangaVolumesInfo("Maria the Virgin Witch")
-	manga, _ := client.SearchManga("Maria the Virgin Witch", 10)
+	// client.GetMangaVolumesInfo("Heart no Kuni no Alice")
+	// client.SearchByTags(includedTags, excludedTags, 4)
+	manga, _ := client.SearchManga("heart no kuni no alice", 10)
 	for _, m := range manga {
 		fmt.Println("manga title: ", m.Attributes.Title)
 	}

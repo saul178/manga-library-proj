@@ -32,6 +32,8 @@ func TestClient() *Client {
 	}
 }
 
+func searchAuthor()
+
 func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 	endpoint := fmt.Sprintf("%s/manga", c.BaseURL)
 	params := url.Values{}

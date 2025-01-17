@@ -32,12 +32,39 @@ func TestClient() *Client {
 	}
 }
 
-func (c *Client) searchAuthor(name string, limit int) ([]api.AuthorData, error) {
-	// endpoint := fmt.Sprintf("%s/author")
-	return []api.AuthorData{}, nil
-}
+func (c *Client) SearchAuthors(name string, limit int) ([]api.AuthorData, error) {
+	endpoint := fmt.Sprintf("%s/author", c.BaseURL)
+	params := url.Values{}
+	params.Add("name", name)
+	params.Add("limit", fmt.Sprintf("%d", limit))
 
-func (c *Client) getMangaCover() {
+	req, err := http.NewRequest("GET", endpoint+"?"+params.Encode(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("API error: %s", resp.Status)
+	}
+
+	var authorResp api.AuthorResponse
+	err = json.NewDecoder(resp.Body).Decode(&authorResp)
+	if err != nil {
+		return nil, err
+	}
+
+	var authorList []api.AuthorData
+	for _, a := range authorResp.Data {
+		authorList = append(authorList, a)
+	}
+
+	return authorList, nil
 }
 
 func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {

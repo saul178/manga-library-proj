@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/saul178/manga-library-proj/src/tests"
@@ -12,8 +13,7 @@ func main() {
 	//	excludedTags := []string{"action"}
 	// client.GetMangaVolumesInfo("Heart no Kuni no Alice")
 	// client.SearchByTags(includedTags, excludedTags, 4)
-	manga, _ := client.SearchManga("heart no kuni no alice", 10)
-	for _, m := range manga {
-		fmt.Println("manga title: ", m.Attributes.Title)
-	}
+	manga, _ := client.SearchAuthors("ken", 10)
+	test, _ := json.MarshalIndent(manga, "", " ")
+	fmt.Println(string(test))
 }

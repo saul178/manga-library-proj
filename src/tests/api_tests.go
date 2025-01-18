@@ -32,7 +32,8 @@ func TestClient() *Client {
 	}
 }
 
-func (c *Client) getCoverArt()
+func (c *Client) getCoverArt(mangaTitle string, limit int) {
+}
 
 func (c *Client) SearchAuthors(name string, limit int) ([]api.AuthorData, error) {
 	endpoint := fmt.Sprintf("%s/author", c.BaseURL)

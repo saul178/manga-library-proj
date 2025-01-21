@@ -18,41 +18,33 @@ import (
 	"github.com/saul178/manga-library-proj/src/api"
 )
 
-const baseUrl = "https://api.mangadex.org"
+const (
+	baseUrl  = "https://api.mangadex.org"
+	coverURL = "https://uploads.mangadex.org"
+)
 
 type Client struct {
 	HTTPClient *http.Client
 	BaseURL    string
+	CoverURL   string
 }
 
 func TestClient() *Client {
 	return &Client{
 		HTTPClient: &http.Client{},
 		BaseURL:    baseUrl,
+		CoverURL:   coverURL,
 	}
 }
 
-func (c *Client) getCoverArt(mangaTitle string, limit int) (api.CoverData, error) {
-	endpoint := fmt.Sprintf("%s/covers", c.BaseURL)
+/*NOTE: To get manga covers i need the manga ID AND the file name url/mangaID/file-name */
+func (c *Client) GetCoverArt(mangaTitle string, limit int) (api.CoverData, error) {
 	getManga, err := c.SearchManga(mangaTitle, limit)
 	if err != nil {
 		return api.CoverData{}, err
 	}
 
 	mangaID := getManga[0].ID
-	fmt.Println(getManga[0].Attributes.Title, mangaID)
-
-	params := url.Values{}
-	params.Add("mangaID", mangaID.String())
-
-	req, err := http.Get(endpoint)
-	if err != nil {
-		return api.CoverData{}, err
-	}
-	defer req.Body.Close()
-
-	var coverResp api.CoverResponse
-
 	return api.CoverData{}, nil
 }
 

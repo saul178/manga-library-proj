@@ -32,7 +32,28 @@ func TestClient() *Client {
 	}
 }
 
-func (c *Client) getCoverArt(mangaTitle string, limit int) {
+func (c *Client) getCoverArt(mangaTitle string, limit int) (api.CoverData, error) {
+	endpoint := fmt.Sprintf("%s/covers", c.BaseURL)
+	getManga, err := c.SearchManga(mangaTitle, limit)
+	if err != nil {
+		return api.CoverData{}, err
+	}
+
+	mangaID := getManga[0].ID
+	fmt.Println(getManga[0].Attributes.Title, mangaID)
+
+	params := url.Values{}
+	params.Add("mangaID", mangaID.String())
+
+	req, err := http.Get(endpoint)
+	if err != nil {
+		return api.CoverData{}, err
+	}
+	defer req.Body.Close()
+
+	var coverResp api.CoverResponse
+
+	return api.CoverData{}, nil
 }
 
 func (c *Client) SearchAuthors(name string, limit int) ([]api.AuthorData, error) {

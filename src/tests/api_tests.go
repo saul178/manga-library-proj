@@ -38,7 +38,37 @@ func TestClient() *Client {
 }
 
 /*NOTE: To get manga covers i need the manga ID AND the file name: ex -> url/mangaID/file-name */
-func (c *Client) GetCoverArt(mangaTitle string, limit int) (api.CoverData, error) {
+func (c *Client) GetCoverArt(mangaTitle string, limit int) ([]api.CoverData, error) {
+	mangaID, _ := c.SearchManga(mangaTitle, limit)
+	endpoint := fmt.Sprintf("%s/cover", c.BaseURL)
+	params := url.Values{}
+	params.Add("manga[]", mangaID[0].ID.String())
+
+	req, err := http.NewRequest("GET", endpoint+"?"+params.Encode(), nil)
+	if err != nil {
+		return []api.CoverData{}, fmt.Errorf("failed to make request %w", err)
+	}
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return []api.CoverData{}, fmt.Errorf("api call failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return []api.CoverData{}, fmt.Errorf("API returned non-200 status: %d", resp.StatusCode)
+	}
+
+	var coverResp api.CoverResponse
+	if err := json.NewDecoder(resp.Body).Decode(&coverResp); err != nil {
+		return []api.CoverData{}, fmt.Errorf("failed to decode response: %w", err)
+	}
+
+	var coverData []api.CoverData
+	for _, c := range coverResp.Data {
+		coverData = append(coverData, c)
+	}
+	return coverData, nil
 }
 
 func (c *Client) SearchAuthors(name string, limit int) ([]api.AuthorData, error) {

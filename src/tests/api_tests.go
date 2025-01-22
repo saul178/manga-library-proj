@@ -37,15 +37,8 @@ func TestClient() *Client {
 	}
 }
 
-/*NOTE: To get manga covers i need the manga ID AND the file name url/mangaID/file-name */
+/*NOTE: To get manga covers i need the manga ID AND the file name: ex -> url/mangaID/file-name */
 func (c *Client) GetCoverArt(mangaTitle string, limit int) (api.CoverData, error) {
-	getManga, err := c.SearchManga(mangaTitle, limit)
-	if err != nil {
-		return api.CoverData{}, err
-	}
-
-	mangaID := getManga[0].ID
-	return api.CoverData{}, nil
 }
 
 func (c *Client) SearchAuthors(name string, limit int) ([]api.AuthorData, error) {

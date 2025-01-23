@@ -54,3 +54,15 @@ type MangaRelationships struct {
 	Related    string    `json:"related"`
 	Attributes struct{}  `json:"attributes"`
 }
+
+func (m *MangaData) MangaID() uuid.UUID {
+	return m.ID
+}
+
+func (m *MangaAttributes) MangaTitle() map[string]string {
+	return m.Title
+}
+
+func (m *MangaAttributes) MangaDescriptions() map[string]string {
+	return m.Description
+}

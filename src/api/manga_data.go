@@ -55,8 +55,9 @@ type MangaRelationships struct {
 	Attributes struct{}  `json:"attributes"`
 }
 
-func (m *MangaData) GetMangaID() uuid.UUID {
-	return m.ID
+// place holder functions for now, theyre not finished.
+func (m *MangaData) GetMangaID() string {
+	return m.ID.String()
 }
 
 func (m *MangaAttributes) GetMangaTitle() map[string]string {

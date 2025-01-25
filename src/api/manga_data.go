@@ -60,8 +60,8 @@ func (m *MangaData) GetMangaID() string {
 	return m.ID.String()
 }
 
-func (m *MangaAttributes) GetMangaTitle() map[string]string {
-	return m.Title
+func (m *MangaData) GetMangaTitle(langCode string) map[string]string {
+	return m.Attributes.Title
 }
 
 func (m *MangaAttributes) GetMangaDescriptions() map[string]string {

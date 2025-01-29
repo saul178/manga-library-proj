@@ -13,7 +13,7 @@ func main() {
 	//	excludedTags := []string{"action"}
 	// client.GetMangaVolumesInfo("Heart no Kuni no Alice")
 	// client.SearchByTags(includedTags, excludedTags, 4)
-	manga, _ := client.SearchAuthors("chainsaw man", 1)
+	manga, _ := client.SearchManga("chainsaw man", 1)
 	test, _ := json.MarshalIndent(manga, "", " ")
 	fmt.Println(string(test))
 }

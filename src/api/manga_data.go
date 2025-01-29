@@ -64,6 +64,6 @@ func (m *MangaData) GetMangaTitle(langCode string) map[string]string {
 	return m.Attributes.Title
 }
 
-func (m *MangaAttributes) GetMangaDescriptions() map[string]string {
-	return m.Description
+func (m *MangaData) GetMangaDescriptions() map[string]string {
+	return m.Attributes.Description
 }

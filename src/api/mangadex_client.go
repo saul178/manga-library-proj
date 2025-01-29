@@ -1,6 +1,8 @@
 package api
 
 import (
+	"context"
+	"io"
 	"net/http"
 )
 
@@ -26,4 +28,10 @@ func DexClient() *MangadexService {
 		header:  header,
 		baseURL: baseURL,
 	}
+}
+
+func request(ctx context.Context, methodCode, url string, body io.Reader) (*http.Response, error) {
+}
+
+func decodeJson() {
 }

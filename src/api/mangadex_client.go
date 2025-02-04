@@ -37,7 +37,6 @@ func (c *MangadexService) Request(ctx context.Context, methodCode, url string, b
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-
 	req.Header = c.header
 
 	resp, err := c.client.Do(req)
@@ -49,6 +48,7 @@ func (c *MangadexService) Request(ctx context.Context, methodCode, url string, b
 			return nil, err
 		}
 		defer resp.Body.Close()
+
 		return nil, fmt.Errorf("non 200 status code from mangadex server: %d %s", resp.StatusCode, er.GetErrors())
 	}
 	return resp, nil
@@ -65,6 +65,5 @@ func (c *MangadexService) RequestAndDecodeJson(ctx context.Context, method, url 
 	if err := json.NewDecoder(resp.Body).Decode(t); err != nil {
 		return fmt.Errorf("failed to decode JSON: %w", err)
 	}
-
 	return nil
 }

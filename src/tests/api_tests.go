@@ -127,7 +127,7 @@ func (c *Client) SearchManga(title string, limit int) ([]api.MangaData, error) {
 		return nil, fmt.Errorf("API error: %s", resp.Status)
 	}
 
-	var result api.Manga
+	var result api.MangaResponse
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
 		return nil, err
@@ -207,7 +207,7 @@ func (c *Client) SearchByTags(includedTags, excludedTags []string, limit int) ([
 	}
 	defer mangaResp.Body.Close()
 
-	var mangaData api.Manga
+	var mangaData api.MangaResponse
 	mangaErr := json.NewDecoder(mangaResp.Body).Decode(&mangaData)
 	if mangaErr != nil {
 		return nil, err

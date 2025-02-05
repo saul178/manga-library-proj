@@ -3,13 +3,20 @@ package api
 import "github.com/google/uuid"
 
 // NOTE: to get specific volumes/chapters i think i have to create another struct that only handles getting the volumes
-// and chapters. for the hopes of not bloating this file, i think i should create seperate api helpers etc
+// and chapters. For the hopes of not bloating this file, i think i should create separate api helpers etc
 
-// NOTE: i might have to refactor this in the future, im just not sure how i want to handle some of this info
+// NOTE: i might have to refactor this in the future, I'm just not sure how i want to handle some of this info
 
 // NOTE: use Go's memory profiling tool "pprof" for finding bottlenecks in memory usage.
 
-type Manga struct {
+const (
+	// endpoint to list all manga related to what is being searched.
+	listMangaEndpoint = "manga/"
+	// endpoint to get a specific manga by its ID
+	getSpecificMangaEndpoint = "/manga/%s"
+)
+
+type MangaResponse struct {
 	Result   string      `json:"result"`
 	Response string      `json:"response"`
 	Data     []MangaData `json:"data"`
@@ -55,12 +62,15 @@ type MangaRelationships struct {
 	Attributes struct{}  `json:"attributes"`
 }
 
+func (c *MangadexService) listManga() {
+}
+
 // place holder functions for now, theyre not finished.
 func (m *MangaData) GetMangaID() string {
 	return m.ID.String()
 }
 
-func (m *MangaData) GetMangaTitle(langCode string) map[string]string {
+func (m *MangaData) GetMangaTitle() map[string]string {
 	return m.Attributes.Title
 }
 

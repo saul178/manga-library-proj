@@ -62,6 +62,10 @@ type MangaRelationships struct {
 	Attributes struct{}  `json:"attributes"`
 }
 
+/*
+TODO: i want to make a get request to mangadex to get a list of manga to show up, then i want to search for a specific
+manga to grab relevant information of that manga.
+*/
 func (c *MangadexService) listManga() {
 }
 
@@ -70,10 +74,10 @@ func (m *MangaData) GetMangaID() string {
 	return m.ID.String()
 }
 
-func (m *MangaData) GetMangaTitle() map[string]string {
-	return m.Attributes.Title
+func (m *MangaData) GetMangaTitle(langCode string) string {
+	return m.Attributes.Title[langCode]
 }
 
-func (m *MangaData) GetMangaDescriptions() map[string]string {
-	return m.Attributes.Description
+func (m *MangaData) GetMangaDescriptions(langCode string) string {
+	return m.Attributes.Description[langCode]
 }

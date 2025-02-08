@@ -9,14 +9,15 @@ import (
 )
 
 const (
-	baseURL  = "https://api.mangadex.com"
+	baseURL  = "https://api.mangadex.org"
 	coverURL = "https://uploads.mangadex.org"
 )
 
 type MangadexService struct {
-	client  *http.Client
-	header  http.Header
-	baseURL string
+	client   *http.Client
+	header   http.Header
+	baseURL  string
+	coverURL string
 }
 
 // this is only for guest accounts, if needed i will do an authenticated user if i have to.
@@ -26,12 +27,14 @@ func DexClient() *MangadexService {
 	header.Set("Content-Type", "application/json")
 
 	return &MangadexService{
-		client:  &client,
-		header:  header,
-		baseURL: baseURL,
+		client:   &client,
+		header:   header,
+		baseURL:  baseURL,
+		coverURL: coverURL,
 	}
 }
 
+// Sends a Request to Mangadex api.
 func (c *MangadexService) Request(ctx context.Context, methodCode, url string, body io.Reader) (*http.Response, error) {
 	req, err := http.NewRequestWithContext(ctx, methodCode, url, body)
 	if err != nil {
@@ -49,12 +52,18 @@ func (c *MangadexService) Request(ctx context.Context, methodCode, url string, b
 		}
 		defer resp.Body.Close()
 
-		return nil, fmt.Errorf("non 200 status code from mangadex server: %d %s", resp.StatusCode, er.GetErrors())
+		return nil, fmt.Errorf("non 200 status code from Mangadex server: %d %s", resp.StatusCode, er.GetErrors())
 	}
 	return resp, nil
 }
 
-// (t any) represents the structs for "type" manga data, author data and cover image data. Hopefully it works the way i think it does
+/*
+NOTE:
+sends a request to manga dex and decodes the json response, else it returns an error response if unsuccessful
+
+(t any) represents the any struct for "type" manga data, author data and cover image data. Hopefully it works the way
+i think it does, i should probably just declare it as a struct type but i wanna see what this does.
+*/
 func (c *MangadexService) RequestAndDecodeJson(ctx context.Context, method, url string, body io.Reader, t any) error {
 	resp, err := c.Request(ctx, method, url, body)
 	if err != nil {

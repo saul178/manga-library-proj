@@ -1,17 +1,19 @@
 package api
 
-import "github.com/google/uuid"
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"net/url"
 
-// NOTE: to get specific volumes/chapters i think i have to create another struct that only handles getting the volumes
-// and chapters. For the hopes of not bloating this file, i think i should create separate api helpers etc
-
-// NOTE: i might have to refactor this in the future, I'm just not sure how i want to handle some of this info
+	"github.com/google/uuid"
+)
 
 // NOTE: use Go's memory profiling tool "pprof" for finding bottlenecks in memory usage.
 
 const (
 	// endpoint to list all manga related to what is being searched.
-	listMangaEndpoint = "manga/"
+	listMangaEndpoint = "/manga"
 	// endpoint to get a specific manga by its ID
 	getSpecificMangaEndpoint = "/manga/%s"
 )
@@ -66,7 +68,27 @@ type MangaRelationships struct {
 TODO: i want to make a get request to mangadex to get a list of manga to show up, then i want to search for a specific
 manga to grab relevant information of that manga.
 */
-func (c *MangadexService) listManga() {
+
+/*
+NOTE:
+when searching for manga the url parameters that it accepts are titles of the manga and the limit
+the context that should be passed down is context.WithTimeout so when mangadex hangs.
+*/
+func (s *MangadexService) SearchMangas(ctx context.Context, params url.Values) (*MangaResponse, error) {
+	u, err := url.Parse(s.baseURL)
+	fmt.Println(u)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse URL: %w", err)
+	}
+	u.Path = listMangaEndpoint
+
+	u.RawQuery = params.Encode()
+	fmt.Println(u)
+
+	var mangaListResp MangaResponse
+	err = s.RequestAndDecodeJson(ctx, http.MethodGet, u.String(), nil, &mangaListResp)
+	fmt.Println(mangaListResp)
+	return &mangaListResp, err
 }
 
 // place holder functions for now, theyre not finished.

@@ -18,13 +18,23 @@ const (
 	getSpecificMangaEndpoint = "/manga/%s"
 )
 
+// TODO: omit empty fields from some of the responses that might be not have data for all structs in this project.
 type MangaResponse struct {
-	Result   string      `json:"result"`
-	Response string      `json:"response"`
-	Data     []MangaData `json:"data"`
-	Limit    int         `json:"limit"`
-	Offset   int         `json:"offset"`
-	Total    int         `json:"total"`
+	Result   string `json:"result"`
+	Response string `json:"response"`
+}
+
+type SingleMangaResponse struct {
+	MangaResponse
+	Data MangaData `json:"data"`
+}
+
+type MultiMangaResponse struct {
+	MangaResponse
+	ListMangaData []MangaData `json:"data"`
+	Limit         int         `json:"limit"`
+	Offset        int         `json:"offset"`
+	Total         int         `json:"total"`
 }
 
 type MangaData struct {
@@ -58,10 +68,10 @@ type MangaAttributes struct {
 }
 
 type MangaRelationships struct {
-	ID         uuid.UUID `json:"id"`
-	Type       string    `json:"type"`
-	Related    string    `json:"related"`
-	Attributes struct{}  `json:"attributes"`
+	ID         uuid.UUID   `json:"id"`
+	Type       string      `json:"type"`
+	Related    string      `json:"related,omitempty"`
+	Attributes interface{} `json:"attributes,omitempty"`
 }
 
 /*
@@ -72,23 +82,40 @@ manga to grab relevant information of that manga.
 /*
 NOTE:
 when searching for manga the url parameters that it accepts are titles of the manga and the limit
-the context that should be passed down is context.WithTimeout so when mangadex hangs.
+the context that should be passed down is context.WithTimeout so when mangadex hangs we don't continue to send the
+request and instead handle that gracefully.
 */
-func (s *MangadexService) SearchMangas(ctx context.Context, params url.Values) (*MangaResponse, error) {
+func (s *MangadexService) SearchMangas(ctx context.Context, params url.Values) (*MultiMangaResponse, error) {
 	u, err := url.Parse(s.baseURL)
-	fmt.Println(u)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse URL: %w", err)
 	}
 	u.Path = listMangaEndpoint
+	u.RawQuery = params.Encode()
 
+	var mangaListResp MultiMangaResponse
+	err = s.RequestAndDecodeJson(ctx, http.MethodGet, u.String(), nil, &mangaListResp)
+	return &mangaListResp, err
+}
+
+/*
+NOTE:
+fetches a single manga by its ID, valid paramaters that can be included are: manga, cover_art, author,
+artist, tag, and creator.
+*/
+
+func (s *MangadexService) GetManga(ctx context.Context, id uuid.UUID, params url.Values) (*SingleMangaResponse, error) {
+	u, err := url.Parse(s.baseURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse URL: %w", err)
+	}
+	u.Path = fmt.Sprintf(getSpecificMangaEndpoint, id)
 	u.RawQuery = params.Encode()
 	fmt.Println(u)
 
-	var mangaListResp MangaResponse
-	err = s.RequestAndDecodeJson(ctx, http.MethodGet, u.String(), nil, &mangaListResp)
-	fmt.Println(mangaListResp)
-	return &mangaListResp, err
+	var manga SingleMangaResponse
+	err = s.RequestAndDecodeJson(ctx, http.MethodGet, u.String(), nil, &manga)
+	return &manga, err
 }
 
 // place holder functions for now, theyre not finished.

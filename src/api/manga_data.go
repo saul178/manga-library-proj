@@ -118,7 +118,24 @@ func (s *MangadexService) GetManga(ctx context.Context, id uuid.UUID, params url
 	return &manga, err
 }
 
-// place holder functions for now, theyre not finished.
+// TODO: place holder functions for now, theyre not finished. maybe have a custom struct with the data i care about?
+// maybe have this in it's own file since it handles a different job of just getting specific info and isnt in charge of
+// doing api calls?
+
+type MangaInfo struct {
+	Title         map[string]string
+	Description   map[string]string
+	Links         map[string]string
+	LastVolume    string
+	LastChapter   string
+	Status        string
+	Year          int
+	ContentRating string
+	Tags          []TagsData
+	CreatedAt     string
+	UpdateAt      string
+}
+
 func (m *MangaData) GetMangaID() string {
 	return m.ID.String()
 }
